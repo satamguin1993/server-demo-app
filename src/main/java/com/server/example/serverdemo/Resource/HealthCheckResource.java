@@ -13,7 +13,7 @@ public class HealthCheckResource {
 
     @GetMapping("/v1/health-check")
     public ResponseEntity<String> healthCheck() {
-        logger.info("Health check is working");
+        logger.info("Health check is working fine !!!");
         return ResponseEntity.ok().body(new String("Status:Ok"));
     }
 
