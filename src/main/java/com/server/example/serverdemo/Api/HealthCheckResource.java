@@ -1,4 +1,4 @@
-package com.server.example.serverdemo.Resource;
+package com.server.example.serverdemo.Api;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

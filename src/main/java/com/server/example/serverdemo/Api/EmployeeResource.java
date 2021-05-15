@@ -1,6 +1,6 @@
-package com.server.example.serverdemo.Resource;
+package com.server.example.serverdemo.Api;
 
-import com.server.example.serverdemo.Resource.model.EmployeeRequest;
+import com.server.example.serverdemo.Api.model.EmployeeRequest;
 import com.server.example.serverdemo.Service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

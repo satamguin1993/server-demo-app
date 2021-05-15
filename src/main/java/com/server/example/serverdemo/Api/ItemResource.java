@@ -1,6 +1,6 @@
-package com.server.example.serverdemo.Resource;
+package com.server.example.serverdemo.Api;
 
-import com.server.example.serverdemo.Resource.model.ItemRequest;
+import com.server.example.serverdemo.Api.model.ItemRequest;
 import com.server.example.serverdemo.Service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class ItemResource {
     }
 
     @GetMapping("/v1/items/{itemId}")
-    public ResponseEntity<ItemRequest> getItemById(@PathVariable("itemId") int itemId) {
+    public ResponseEntity<ItemRequest> getItemById(@PathVariable(value = "itemId") Integer itemId) {
         logger.info("ItemRequest Param or Query Param Id sent from client for itemId={}", itemId);
         ItemRequest itemRequest = itemService.getItemById(itemId);
         logger.info("Employee Retrieved from the DB for itemId={}", itemId);
@@ -46,7 +46,7 @@ public class ItemResource {
     }
 
     @PatchMapping("/v1/items/{itemId}")
-    public ResponseEntity<ItemRequest> updateItemById(@PathVariable("itemId") int itemId,
+    public ResponseEntity<ItemRequest> updateItemById(@PathVariable("itemId") Integer itemId,
                                                       @RequestBody ItemRequest itemRequest) {
         logger.info("Request received to update Item for itemId={}", itemId);
         itemRequest = itemService.updateItemRequest(itemId, itemRequest);

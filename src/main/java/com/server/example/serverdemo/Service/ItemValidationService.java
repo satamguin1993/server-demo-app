@@ -1,7 +1,7 @@
 package com.server.example.serverdemo.Service;
 
-import com.server.example.serverdemo.Resource.model.ItemRequest;
-import com.server.example.serverdemo.Resource.model.ValidationResult;
+import com.server.example.serverdemo.Api.model.ItemRequest;
+import com.server.example.serverdemo.Api.model.ValidationResult;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,5 +11,4 @@ public class ItemValidationService {
         ValidationResult validationResult = new ValidationResult();
         return validationResult;
     }
-
 }

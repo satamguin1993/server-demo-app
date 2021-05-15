@@ -1,7 +1,6 @@
-package com.server.example.serverdemo.Resource.model;
+package com.server.example.serverdemo.Api.model;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ValidationResult {
