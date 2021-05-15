@@ -1,16 +1,22 @@
 package com.server.example.serverdemo.Exception;
 
 import com.server.example.serverdemo.Api.model.ValidationResult;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-public class EmployeeValidationException extends CftException{
+@Getter
+public class TransactionValidationException extends CftException{
 
     private ValidationResult errorDetails;
 
-    public EmployeeValidationException(ValidationResult validationResult) {
+    public TransactionValidationException(ValidationResult validationResult) {
         super(HttpStatus.UNPROCESSABLE_ENTITY.value(),
                 "Validation Error : " + validationResult.getErrorList().toString());
 
         errorDetails = validationResult;
+    }
+
+    public ValidationResult getErrorDetails() {
+        return errorDetails;
     }
 }

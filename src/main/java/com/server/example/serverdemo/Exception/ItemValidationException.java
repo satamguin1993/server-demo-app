@@ -1,6 +1,6 @@
 package com.server.example.serverdemo.Exception;
 
-import com.server.example.serverdemo.Resource.model.ValidationResult;
+import com.server.example.serverdemo.Api.model.ValidationResult;
 import org.springframework.http.HttpStatus;
 
 public class ItemValidationException extends CftException{

@@ -4,8 +4,8 @@ import com.server.example.serverdemo.Exception.ItemNotFoundException;
 import com.server.example.serverdemo.Exception.ItemValidationException;
 import com.server.example.serverdemo.Model.Item;
 import com.server.example.serverdemo.Repository.ItemRepository;
-import com.server.example.serverdemo.Resource.model.ItemRequest;
-import com.server.example.serverdemo.Resource.model.ValidationResult;
+import com.server.example.serverdemo.Api.model.ItemRequest;
+import com.server.example.serverdemo.Api.model.ValidationResult;
 import com.server.example.serverdemo.Mapper.ItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class ItemService {
         return itemRequest;
     }
 
-    public ItemRequest getItemById(int itemId) {
+    public ItemRequest getItemById(Integer itemId) {
 
         Optional<Item> optionalItem = itemRepository.findById(itemId);
         ItemRequest itemRequest;
@@ -92,16 +92,6 @@ public class ItemService {
         if (optionalItem.isPresent()) {
             logger.info("Item found for the provided itemId={}", itemId);
             itemRequest = ItemMapper.INSTANCE.mapToItemRequest(optionalItem.get());
-            if (request.getDepartment() != null) {
-                itemRequest.setDepartment(request.getDepartment());
-            } if (request.getName() != null) {
-                itemRequest.setName(request.getName());
-            } if (request.getAvailableCopies() != null) {
-                itemRequest.setAvailableCopies(request.getAvailableCopies());
-            } if (request.getSoldSoFar() != null) {
-                itemRequest.setSoldSoFar(request.getSoldSoFar());
-            }
-
             itemRequest = ItemMapper.INSTANCE.mapToItemRequest(
                             itemRepository.save(
                             ItemMapper.INSTANCE.mapToItemEntity(itemRequest)));

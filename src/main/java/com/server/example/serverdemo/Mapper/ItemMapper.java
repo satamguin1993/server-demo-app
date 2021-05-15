@@ -1,7 +1,7 @@
 package com.server.example.serverdemo.Mapper;
 
 import com.server.example.serverdemo.Model.Item;
-import com.server.example.serverdemo.Resource.model.ItemRequest;
+import com.server.example.serverdemo.Api.model.ItemRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

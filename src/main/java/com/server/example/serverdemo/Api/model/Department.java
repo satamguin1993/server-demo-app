@@ -1,4 +1,4 @@
-package com.server.example.serverdemo.Resource.model;
+package com.server.example.serverdemo.Api.model;
 
 public enum Department {
     MATH,
