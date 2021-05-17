@@ -1,4 +1,4 @@
-package com.server.example.serverdemo.Api.model;
+package com.server.example.serverdemo.Api.Requests;
 
 import lombok.Data;
 

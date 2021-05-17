@@ -1,8 +1,9 @@
 package com.server.example.serverdemo.Service;
 
-import com.server.example.serverdemo.Api.model.TransactionRequest;
-import com.server.example.serverdemo.Api.model.ValidationResult;
-import com.server.example.serverdemo.Model.Item;
+import com.server.example.serverdemo.Api.Requests.ItemDetail;
+import com.server.example.serverdemo.Api.Requests.TransactionRequest;
+import com.server.example.serverdemo.Api.Requests.ValidationResult;
+import com.server.example.serverdemo.Entity.Item;
 import com.server.example.serverdemo.Repository.ItemRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,24 +30,23 @@ public class ValidateTransactionService {
 
     public Optional<ValidationResult> validateCreateTransactionRequest(TransactionRequest request) {
         ValidationResult result = new ValidationResult();
-        if(CollectionUtils.isEmpty(request.getItemIds())) {
+        if(CollectionUtils.isEmpty(request.getItemDetails())) {
             result.setFailed("items", "items list is empty");
-        } if(StringUtils.isEmpty(request.getCustomerId())) {
+        } if(request.getCustomerId() == null) {
             result.setFailed("customerId", "customerId must not be null or empty");
-        } if(request.getPrice() == null || request.getPrice() < 0f) {
-            result.setFailed("price", "price provided in the request is invalid");
         }
         if (result.hasError()) {
             return Optional.of(result);
         } else {
-            List<Integer> invalidItemIds =
-                    request.getItemIds().stream().filter(itemId -> validateEachItemById(itemId))
+            List<ItemDetail> invalidItems =
+                    request.getItemDetails().stream()
+                            .filter(itemDetail ->
+                                    validateEachItemById(itemDetail.getItemId()))
                             .collect(Collectors.toList());
-            StringBuffer stringBuffer = new StringBuffer();
-            invalidItemIds.stream().forEach(integer -> stringBuffer.append(integer + " "));
-            logger.error("Provided itemIds are not present in the system itemIds={}",
-                    stringBuffer.toString());
-            result.setFailed("itemIds", "Below itemIds are invalid " + stringBuffer.toString());
+            StringBuffer sb = new StringBuffer();
+            invalidItems.stream().forEach(itemDetail -> sb.append(itemDetail.getItemId() + " "));
+            logger.error("Provided itemIds are not present in the system itemIds={}", sb.toString());
+            result.setFailed("itemIds", "Below itemIds are invalid " + sb.toString());
         }
         return Optional.empty();
     }

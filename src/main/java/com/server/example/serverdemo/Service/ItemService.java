@@ -1,11 +1,13 @@
 package com.server.example.serverdemo.Service;
 
+import com.server.example.serverdemo.Api.Requests.TransactionRequest;
+import com.server.example.serverdemo.Entity.ItemDetail;
 import com.server.example.serverdemo.Exception.ItemNotFoundException;
 import com.server.example.serverdemo.Exception.ItemValidationException;
-import com.server.example.serverdemo.Model.Item;
+import com.server.example.serverdemo.Entity.Item;
 import com.server.example.serverdemo.Repository.ItemRepository;
-import com.server.example.serverdemo.Api.model.ItemRequest;
-import com.server.example.serverdemo.Api.model.ValidationResult;
+import com.server.example.serverdemo.Api.Requests.ItemRequest;
+import com.server.example.serverdemo.Api.Requests.ValidationResult;
 import com.server.example.serverdemo.Mapper.ItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,5 +104,32 @@ public class ItemService {
         }
 
         return itemRequest;
+    }
+
+    public void updateItemDetailsBeforeCheckout(TransactionRequest request, List<ItemDetail> itemDetails) {
+        logger.info("Update item details for checkout for transactionId={} customerId={}",
+                request.getTransactionId(), request.getCustomerId());
+
+        itemDetails.stream().forEach(itemDetail -> {
+            Optional<Item> optionalItem = itemRepository.findById(itemDetail.getItemId());
+            if (optionalItem.isPresent()) {
+                Item item = optionalItem.get();
+                Integer itemsBought = itemDetail.getItemBought();
+
+                if (item.getMaxUnitAvailablePerCustomer() >= itemsBought) {
+                    if (item.getMaxUnitAvailablePerCustomer() == itemsBought) {
+                        item.setStatus(Item.Status.SOLD_OUT);
+                    }
+                    Integer availableUnits =  item.getAvailableUnits() - itemsBought;
+                    item.setAvailableUnits(availableUnits);
+                    Integer maxUnitAvailable = item.getMaxUnitAvailablePerCustomer();
+                    item.setMaxUnitAvailablePerCustomer(
+                            availableUnits >= maxUnitAvailable ? maxUnitAvailable : availableUnits);
+                    Integer soldSoFar = item.getSoldSoFar();
+                    item.setSoldSoFar(soldSoFar + itemsBought);
+                }
+                itemRepository.save(item);
+            }
+        });
     }
 }

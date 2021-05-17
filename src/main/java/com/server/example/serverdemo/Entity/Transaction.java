@@ -1,6 +1,10 @@
-package com.server.example.serverdemo.Model;
+package com.server.example.serverdemo.Entity;
 
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -20,13 +24,6 @@ import java.util.UUID;
 @Data
 public class Transaction extends AuditEntity{
 
-    public enum Status {
-        PAID,
-        PENDING,
-        PAYMENT_FAILED,
-        PAYMENT_BY_CREDITS
-    }
-
     public enum PaymentMethod {
         DEBIT_CARD,
         CREDIT_CARD,
@@ -40,14 +37,16 @@ public class Transaction extends AuditEntity{
     private Integer transactionId;
 
     @Column(nullable = false)
-    private String customerId;
+    private Integer customerId;
 
     @OneToMany
     @CollectionTable(joinColumns = @JoinColumn(name = "id"))
-    private List<Item> itemList;
+    @Cascade(CascadeType.ALL)
+    @Fetch(FetchMode.JOIN)
+    private List<ItemDetail> itemDetails;
 
     @Column(nullable = false)
-    private Status status;
+    private String status;
 
     @Column(nullable = false)
     private Float price;

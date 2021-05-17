@@ -1,4 +1,4 @@
-package com.server.example.serverdemo.Model;
+package com.server.example.serverdemo.Entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,16 +29,16 @@ public class Item {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
 
     @Column
     private String description;
 
-    @Column
+    @Column(nullable = false)
     private Float price;
 
-    @Column
+    @Column(nullable = false)
     private Float weight;
 
     @Column
@@ -47,22 +47,22 @@ public class Item {
     @Column
     private Date publishedDate;
 
-    @Column
-    private Integer availableCopies;
+    @Column(nullable = false)
+    private Integer availableUnits;
 
-    @Column
+    @Column(nullable = false)
     private Integer soldSoFar;
 
-    @Column
+    @Column(nullable = false)
     private Integer maxUnitAvailablePerCustomer;
 
     @Column
     private Department department;
 
-    @Column
+    @Column(nullable = false)
     private Status status;
 
-    @Column
+    @Column(nullable = false)
     private UUID encodedItemId;
 
     /*@OneToOne

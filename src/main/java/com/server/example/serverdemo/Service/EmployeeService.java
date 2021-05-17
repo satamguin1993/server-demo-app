@@ -2,10 +2,10 @@ package com.server.example.serverdemo.Service;
 
 import com.server.example.serverdemo.Exception.EmployeeNotFoundException;
 import com.server.example.serverdemo.Exception.EmployeeValidationException;
-import com.server.example.serverdemo.Model.Employee;
+import com.server.example.serverdemo.Entity.Employee;
 import com.server.example.serverdemo.Repository.EmployeeRepository;
-import com.server.example.serverdemo.Api.model.EmployeeRequest;
-import com.server.example.serverdemo.Api.model.ValidationResult;
+import com.server.example.serverdemo.Api.Requests.EmployeeRequest;
+import com.server.example.serverdemo.Api.Requests.ValidationResult;
 import com.server.example.serverdemo.Mapper.EmployeeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

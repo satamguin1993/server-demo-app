@@ -1,4 +1,4 @@
-package com.server.example.serverdemo.Api.model;
+package com.server.example.serverdemo.Api.Requests;
 
 import java.util.HashMap;
 import java.util.Map;

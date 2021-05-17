@@ -1,19 +1,26 @@
 package com.server.example.serverdemo.Api;
 
-import com.server.example.serverdemo.Api.model.TransactionRequest;
+import com.server.example.serverdemo.Api.Requests.TransactionRequest;
 import com.server.example.serverdemo.Exception.TransactionNotFoundException;
 import com.server.example.serverdemo.Service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 @ResponseBody
+@Validated
 public class TransactionResource {
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionResource.class);

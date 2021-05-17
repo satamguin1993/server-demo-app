@@ -1,7 +1,7 @@
 package com.server.example.serverdemo.Service;
 
-import com.server.example.serverdemo.Api.model.ItemRequest;
-import com.server.example.serverdemo.Api.model.ValidationResult;
+import com.server.example.serverdemo.Api.Requests.ItemRequest;
+import com.server.example.serverdemo.Api.Requests.ValidationResult;
 import org.springframework.stereotype.Component;
 
 @Component
