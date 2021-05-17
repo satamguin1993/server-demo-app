@@ -1,4 +1,4 @@
-package com.server.example.serverdemo.Api.model;
+package com.server.example.serverdemo.Api.Requests;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

@@ -1,14 +1,14 @@
 package com.server.example.serverdemo.Service;
 
+import com.server.example.serverdemo.Api.Requests.ItemDetail;
+import com.server.example.serverdemo.Api.Requests.TransactionRequest;
+import com.server.example.serverdemo.Api.Requests.ValidationResult;
+import com.server.example.serverdemo.Entity.Transaction;
 import com.server.example.serverdemo.Exception.TransactionNotFoundException;
 import com.server.example.serverdemo.Exception.TransactionValidationException;
 import com.server.example.serverdemo.Mapper.TransactionMapper;
-import com.server.example.serverdemo.Model.Item;
-import com.server.example.serverdemo.Model.Transaction;
 import com.server.example.serverdemo.Repository.ItemRepository;
 import com.server.example.serverdemo.Repository.TransactionRepository;
-import com.server.example.serverdemo.Api.model.TransactionRequest;
-import com.server.example.serverdemo.Api.model.ValidationResult;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +35,9 @@ public class TransactionService {
     @Autowired
     private ItemRepository itemRepository;
 
+    @Autowired
+    private ItemService itemService;
+
     public TransactionRequest createTransaction(TransactionRequest transactionRequest) {
 
         Optional<ValidationResult> optionalResult =
@@ -48,16 +51,27 @@ public class TransactionService {
             logger.info("Validation successful for creating new transaction request for transactionUniqueId={} customerId={}",
                     transactionRequest.getTransactionUniqueId(),
                     transactionRequest.getCustomerId());
-            updateItemDetailsForCheckout(transactionRequest);
+
+            transactionRequest.setPrice(calculateTotalPriceAfterDiscount(transactionRequest));
             transactionRequest.setStatus(TransactionRequest.Status.PENDING);
             transactionRequest.setCreated(new Date());
             transactionRequest.setTransactionDate(new Date());
-            List<Item> items = fetchAllItemsFromProvidedItemIds(transactionRequest.getItemIds());
-            Transaction transaction = TransactionMapper.INSTANCE.mapToTransactionEntity(transactionRequest, items);
-            transactionRequest = TransactionMapper.INSTANCE.mapToTransactionRequest(
-                    transactionRepository.save(transaction));
+            transactionRequest.setCreatedBy("TO_BE_CHANGED_LATER");
+            transactionRequest.setModified(new Date());
+            transactionRequest.setModifiedBy(new String());
+
+
+            Integer customerId = transactionRequest.getCustomerId();
+            List<com.server.example.serverdemo.Entity.ItemDetail> itemDetailList =
+                    fetchItemDetailList(transactionRequest, customerId);
+
+            itemService.updateItemDetailsBeforeCheckout(transactionRequest, itemDetailList);
+            Transaction transaction = TransactionMapper.INSTANCE.mapToTransactionEntity(
+                                                transactionRequest, itemDetailList);
+
+            transaction = transactionRepository.save(transaction);
+            transactionRequest = TransactionMapper.INSTANCE.mapToTransactionRequest(transaction);
             logger.info("Transaction request is saved successfully in db");
-            linkCustomerWithItemDetailsAfterCheckout(transactionRequest);
         }
 
         logger.info("New transaction request created for transactionId={} transactionUniqueId={} customerId={}",
@@ -68,17 +82,37 @@ public class TransactionService {
         return transactionRequest;
     }
 
-    private List<Item> fetchAllItemsFromProvidedItemIds(List<Integer> itemIds) {
+    private List<com.server.example.serverdemo.Entity.ItemDetail> fetchItemDetailList(
+            TransactionRequest request, Integer customerId) {
+        return request.getItemDetails().stream()
+                .map(itemDetail ->
+                        TransactionMapper.INSTANCE.mapToItemDetailEntity(
+                                itemDetail, customerId))
+                .collect(Collectors.toList());
+
+    }
+
+    private Float calculateTotalPriceAfterDiscount(TransactionRequest request) {
+
+        Float totalPrice = 0F;
+        for (int i=0;i<request.getItemDetails().size(); i++) {
+            ItemDetail itemDetail = request.getItemDetails().get(i);
+            totalPrice += itemDetail.getPricePerUnit() * itemDetail.getItemBought();
+        }
+        return totalPrice;
+    }
+
+    /*private List<Item> fetchAllItemsFromProvidedItemIds(List<ItemDetail> itemDetails) {
 
         List<Item> items =
-                itemIds.stream().map(
-                        integer -> itemRepository.findById(integer))
+                itemDetails.stream().map(
+                        itemDetail -> itemRepository.findById(itemDetail.getItemId()))
                         .filter(optionalItem -> optionalItem.isPresent())
                         .map(optionalItem -> optionalItem.get())
                         .collect(Collectors.toList());
 
         return items;
-    }
+    }*/
 
     public TransactionRequest getTransactionRequestById(Integer transactionId) {
 
@@ -104,20 +138,5 @@ public class TransactionService {
                     .collect(Collectors.toList());
         }
         return transactionRequests;
-    }
-
-
-    //TODO complete this method logic
-    private void linkCustomerWithItemDetailsAfterCheckout(TransactionRequest request) {
-        logger.info("Link customer with items for transactionId={} customerId={}",
-                request.getTransactionId(), request.getCustomerId());
-    }
-
-
-    //TODO complete this method logic
-    private void updateItemDetailsForCheckout(TransactionRequest request) {
-        logger.info("Update item details for checkout for transactionId={} customerId={}",
-                request.getTransactionId(), request.getCustomerId());
-
     }
 }

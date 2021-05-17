@@ -1,8 +1,8 @@
 package com.server.example.serverdemo.Api;
 
-import com.server.example.serverdemo.Api.model.Error;
-import com.server.example.serverdemo.Api.model.ErrorItem;
-import com.server.example.serverdemo.Api.model.ValidationResult;
+import com.server.example.serverdemo.Api.Requests.Error;
+import com.server.example.serverdemo.Api.Requests.ErrorItem;
+import com.server.example.serverdemo.Api.Requests.ValidationResult;
 import com.server.example.serverdemo.Exception.TransactionNotFoundException;
 import com.server.example.serverdemo.Exception.TransactionValidationException;
 import org.springframework.http.HttpStatus;

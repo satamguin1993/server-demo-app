@@ -1,6 +1,6 @@
 package com.server.example.serverdemo.Exception;
 
-import com.server.example.serverdemo.Api.model.ValidationResult;
+import com.server.example.serverdemo.Api.Requests.ValidationResult;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 

@@ -1,5 +1,4 @@
-package com.server.example.serverdemo.Model;
-
+package com.server.example.serverdemo.Entity;
 
 import lombok.Data;
 
@@ -13,16 +12,21 @@ import javax.persistence.Table;
 @Entity
 @Table
 @Data
-public class Category {
+public class Brand {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column
-    private String categoryName;
+    private String name;
 
     @Column
     private String description;
 
+    @Column
+    private String origin;
+
+    @Column
+    private String link;
 }
